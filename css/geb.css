@@ -1,0 +1,31 @@
+*{
+	font-family:'verdana';
+}
+div{
+	padding:0.3em;
+	margin-bottom:1.6em;
+}
+#terrSelCont{
+	background-color:#EE3456;
+}
+#terrCont{
+	background-color:#EE00EE;
+}
+div.streetCont{
+	background-color:#FFFF99;
+}
+div.streetCont div.header{
+	border-bottom:1px solid;
+}
+div.streetCont h3, div.houseCont h4{
+	float: left;
+	margin-top: 0;
+	margin-right: 0.3em;
+}
+div.houseCont{
+	color:#999999;
+	background-color:#003399;
+}
+span.ni{
+	text-decoration:line-through;
+}
