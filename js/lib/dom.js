@@ -66,7 +66,7 @@
 				elemOrText.add(this);
 			}else if(!isString(elemOrText)){
 				elemOrText.appendChild(element);
-			}else if(elemOrText.indexOf('#') === 0){
+			}else if(elemOrText[0] === '#'){
 				document.getElementById(elemOrText.substr(1)).appendChild(element);
 			}else{
 				document.getElementsByTagName(elemOrText)[0].appendChild(element);
@@ -138,7 +138,7 @@
 	 */
 	return function(sel, options){
 		if(isString(sel)){
-			if(sel.indexOf('#') === 0){
+			if(sel[0] === '#'){
 				return new con(document.getElementById(sel.substr(1)));
 			}
 			var el = document.createElement(sel);
