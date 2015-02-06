@@ -22,14 +22,32 @@
 			return self;
 		};
 		/**
-		 * Wenn es ein String ist wird dieser als Text hinzugefügt,
+		 * Wenn es ein String ist wird dieser als Text hinzugefÃ¼gt,
 		 * ansonsten das element selbst
 		 */
-		this.add = function(elemOrText){
+		this.add = function(elemOrText, attribs){
 			if(elemOrText.constructor === this.constructor){
 				element.appendChild(elemOrText.get());
 			}else if(isString(elemOrText)){
-				element.appendChild( document.createTextNode(elemOrText) );
+				if(attribs){
+					var e = document.createElement(elemOrText);
+					for(var prop in attribs){
+						if(attribs.hasOwnProperty(prop)){
+							e[prop] = attribs[prop];
+						}
+					}
+					element.appendChild(e);
+				}else{
+					element.appendChild( document.createTextNode(elemOrText) );	
+				}
+			}else if(typeof elemOrText === 'number' ){
+				//Eine Zahl soll eingesetzt werden
+	 			element.appendChild( document.createTextNode( elemOrText.toString() ) );
+			}else if(elemOrText.constructor === Array){
+				//Ein Array. Fuege jedes Element hinzu
+				for(var i = 0; i<elemOrText.length;i++){
+					self.add(elemOrText[i]);
+				}
 			}else{
 				element.appendChild(elemOrText);
 			}
@@ -37,7 +55,7 @@
 		};
 		/**
 		 * Fuegt das Element einem dom Knoten hinzu
-		 * Wenn ein string uebergeben wird, wird geprüft, ob er mit "#" beginnt.
+		 * Wenn ein string uebergeben wird, wird geprÃ¼ft, ob er mit "#" beginnt.
 		 * in diesem Fall wird dem Knoten mit der ID das Element angehaengt
 		 * ansonsten dem ersten Element mit dem Tagnamen.
 		 * Wenn Parameter kein String ist wird Element dem Parameter angehaengt.
@@ -110,18 +128,28 @@
 		return typeof t === 'string';
 	};
 	/**
-	 * Wenn ein String übergeben wird,
-	 * und dieser mit '#' beginnt wird ein Element mit der ID gesucht.
-	 * ansonsten wird ein Element mit dem Tag erzeugt
+	 * Wenn ein String uebergeben wird,
+	 * und dieser mit '#' beginnt wird ein Element mit der ID gesucht,
+	 * ansonsten wird ein Element mit dem Tag erzeugt.
+	 * Wenn ein Element per Tagname erzeugt wird, kann man als nÃ¤chsten Parameter Attribute mitgeben.
+	 * Dabei ist zu berÃ¼cksichtigen, dass man statt 'class' 'className' und statt 'for' (bei label) 'htmlFor' nehmen muss.
 	 * 
-	 * ansonsten wird dieser DOM Knoten umschlossen
+	 * Wenn der erste Parameter kein String ist wird dieser als Element genommen.
 	 */
-	return function(sel){
+	return function(sel, options){
 		if(isString(sel)){
 			if(sel.indexOf('#') === 0){
 				return new con(document.getElementById(sel.substr(1)));
 			}
-			return new con(document.createElement(sel));
+			var el = document.createElement(sel);
+			if(options){
+				for(var prop in options){
+					if(options.hasOwnProperty(prop)){
+						el[prop] = options[prop];
+					}
+				}
+			}
+			return new con(el);
 		}
 		return new con(sel);
 	};
