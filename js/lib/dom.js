@@ -123,6 +123,16 @@
 			element.value = valToSet;
 			return self;
 		};
+		/**
+		 * Zum Erweitern der Funktionalität
+		 */
+		this.extend = function(values){
+			for(var o in values){
+				if(values.hasOwnProperty){
+					self.prototype[o] = values[o];
+				}
+			}
+		};
 	};
 	var isString = function(t){
 		return typeof t === 'string';
@@ -136,7 +146,7 @@
 	 * 
 	 * Wenn der erste Parameter kein String ist wird dieser als Element genommen.
 	 */
-	return function(sel, options){
+	var ret = function(sel, options){
 		if(isString(sel)){
 			if(sel.charAt(0) === '#'){
 				return new con(document.getElementById(sel.substr(1)));
@@ -153,4 +163,24 @@
 		}
 		return new con(sel);
 	};
+	/**
+	 * Ermoeglicht dem instanzlosen Objekt Funktionen hinzuzufuegen
+	 */
+	ret.extend = function(values){
+		for(var prop in values){
+			if(values.hasOwnProperty(prop)){
+				ret[prop] = values[prop];
+			}
+		}
+	};
+	ret.fn = con.prototype;
+	ret.fn.extend = function(values){
+		for(var prop in values){
+			if( values.hasOwnProperty( prop ) ){
+				con.prototype[prop] = values[prop];
+			}
+		}
+	};
+
+	return ret;
  });
